@@ -47,7 +47,8 @@ router
             await User.addUser(user);
             res.send(result.succ(null, '注册成功'));
         } catch (err) {
-            res.send(result.succ(null, err));
+            console.log(err);
+            res.send(result.succ(null, '注册失败'));
         }
     })
     // 用户注销

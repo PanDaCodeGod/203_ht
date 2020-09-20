@@ -7,6 +7,10 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(bodyParser.json());
 
+// 自定义中间件
+const jwtvalidate = require('./middleware/jwt');
+app.use(jwtvalidate);
+
 // 导入路由
 const BillRouter = require('./api/bill');
 const UserBill = require('./api/user');
