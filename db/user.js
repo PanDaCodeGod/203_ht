@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         set(val) {
-            return require('bcrypt').hashSync(val, 10);
+            return require('bcrypt').hashSync(String(val), 10);
         }
     },
     role: {
@@ -53,7 +53,9 @@ function getUserByName(name) {
 // 注册账号
 function addUser(obj) {
     return new Promise((reslove, reject) => {
-        Bill.create({ ...obj }, (err, ret) => {
+        User.create({
+            ...obj
+        }, (err, ret) => {
             if (err) {
                 reject(err);
             }
@@ -61,10 +63,12 @@ function addUser(obj) {
         })
     });
 }
-// 删除某个用户
+// 注销账户
 function deleteUserById(id) {
     return new Promise((reslove, reject) => {
-        User.deleteOne({ _id: id }, function (err, ret) {
+        User.deleteOne({
+            _id: id
+        }, function (err, ret) {
             if (err) {
                 reject(err);
             }
@@ -78,5 +82,3 @@ function deleteUserById(id) {
 module.exports.getUserByName = getUserByName;
 module.exports.addUser = addUser;
 module.exports.deleteUserById = deleteUserById;
-
-

@@ -5,7 +5,7 @@ const result = {
         return {
             code: 0,
             data: data || {},
-            msg: msg || '接口请求成功'
+            msg: msg || '成功'
         }
     },
     // 失败的结果
@@ -13,7 +13,7 @@ const result = {
         return {
             coode: -1,
             data: data || {},
-            msg: msg || '服务器端出现了一些异常,请联系管理员'
+            msg: msg || '失败'
         }
     }
 }

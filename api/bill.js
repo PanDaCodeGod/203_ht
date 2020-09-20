@@ -10,22 +10,26 @@ router
             let data = await Bill.getBills();
             res.send(result.succ(data));
         } catch (err) {
-            res.send(result.fail('接口出现了一些错误'))
+            res.send(result.succ(null, err))
         }
     })
     // 添加流水
     .post('/bill', async (req, res) => {
         req.body.name = 'bbb';
-        await Bill.addBill(req.body);
-        res.send(result.succ(null, "流水添加成功"));
+        try {
+            await Bill.addBill(req.body);
+            res.send(result.succ(null, "添加成功"));
+        } catch (err) {
+            res.send(result.succ(null, err));
+        }
     })
     // 删除某一条流水
     .delete('/bill', (req, res) => {
         try {
             Bill.deleteBillById(req.body.id);
-            res.send(result.succ(null, '本条流水删除成功'));
+            res.send(result.succ(null, '删除成功'));
         } catch (err) {
-            res.send(result.fail('接口出现了一些错误'))
+            res.send(result.succ(null, err))
         }
     })
 
