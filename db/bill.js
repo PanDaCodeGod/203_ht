@@ -51,7 +51,9 @@ function getBills() {
 function addBill(obj) {
     return new Promise((reslove, reject) => {
 
-        Bill.create({ ...obj }, (err, ret) => {
+        Bill.create({
+            ...obj
+        }, (err, ret) => {
             if (err) {
                 reject(err);
             }
@@ -62,19 +64,37 @@ function addBill(obj) {
 // 删除某条流水
 function deleteBillById(id) {
     return new Promise((reslove, reject) => {
-        Bill.updateOne({ _id: id }, { isdelete: true }, function (err, ret) {
+        Bill.updateOne({
+            _id: id
+        }, {
+            isdelete: true
+        }, function (err, ret) {
             if (err) {
                 reject(err);
             }
             reslove(ret)
         });
     });
-
 }
-
-
+// 获取年度花费
+function getTotal() {
+    return new Promise((reslove, reject) => {
+        Bill.aggregate([{
+            $match: obj
+        }, {
+            $group: {
+                _id: null,
+                money: {
+                    $sum: "$money"
+                }
+            }
+        }], function (err, ret) {
+            if (err) reject(err);
+            reslove(ret);
+        });
+    });
+}
 module.exports.getBills = getBills;
 module.exports.addBill = addBill;
 module.exports.deleteBillById = deleteBillById;
-
-
+module.exports.getTotal = getTotal;

@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const result = require('../utils/result');
 const bcrypt = require('bcrypt');
+// 注册码
+const validateCode = require('../utils/registercode');
 // 数据库接口
 const User = require('../db/user');
 
@@ -26,12 +28,11 @@ router
                 id: String(user_db._id)
             }, config.JWT_KEY);
 
-            res.send(result.succ({
+            return res.send(result.succ({
                 token,
                 user_db
             }, "登录成功"));
         } catch (err) {
-            console.log(err);
             return res.send(result.succ(null, '出现错误'));
         }
 
@@ -44,11 +45,21 @@ router
             password: req.body.password
         };
         try {
-            await User.addUser(user);
-            res.send(result.succ(null, '注册成功'));
+            let user = await User.getUserByName(req.body.name);
+            if (user) return res.send(result.succ(null, '用户已经存在'));
         } catch (err) {
-            console.log(err);
-            res.send(result.succ(null, '注册失败'));
+            return res.send(result.succ(null, '服务器异常'));
+        }
+        const flag = await validateCode(req.body.code);
+        if (flag) {
+            try {
+                await User.addUser(user);
+                return res.send(result.succ(null, '注册成功'));
+            } catch (err) {
+                return res.send(result.succ(null, '注册失败'));
+            }
+        } else {
+            return res.send(result.succ(null, '注册码有问题'));
         }
     })
     // 用户注销

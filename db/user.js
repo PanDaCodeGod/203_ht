@@ -37,6 +37,15 @@ function getUsers() {
         });
     });
 }
+// 通过id查找
+function getUserById(id) {
+    return new Promise((reslove, reject) => {
+        User.findById(id, (err, ret) => {
+            if (err) reject(err);
+            reslove(ret);
+        })
+    });
+}
 // 通过用户名查找用户
 function getUserByName(name) {
     return new Promise((reslove, reject) => {
@@ -81,4 +90,6 @@ function deleteUserById(id) {
 
 module.exports.getUserByName = getUserByName;
 module.exports.addUser = addUser;
+module.exports.getUsers = getUsers;
+module.exports.getUserById = getUserById;
 module.exports.deleteUserById = deleteUserById;
