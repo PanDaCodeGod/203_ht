@@ -3,7 +3,6 @@ const fs = require('fs');
 flag = false;
 
 async function read(codeStr) {
-    console.log(codeStr);
     if (codeStr.trim().length === 0) return flag;
     let code = await fs.readFileSync(__dirname + '/code.json', {
         encoding: 'utf8'

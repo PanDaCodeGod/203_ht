@@ -6,11 +6,9 @@ const bcrypt = require('bcrypt');
 const validateCode = require('../utils/registercode');
 // 数据库接口
 const User = require('../db/user');
-
 const jwt = require('jsonwebtoken');
 // JWT_KEY
 const config = require('../config');
-
 router
     // 登录
     .post('/login', async (req, res) => {
@@ -35,8 +33,6 @@ router
         } catch (err) {
             return res.send(result.succ(null, '出现错误'));
         }
-
-
     })
     // 用户注册
     .post('/register', async (req, res) => {
@@ -65,6 +61,6 @@ router
     // 用户注销
     .delete('/zhuxiao', (req, res) => {
         res.send('1s');
-    })
+    });
 
 module.exports = router;
