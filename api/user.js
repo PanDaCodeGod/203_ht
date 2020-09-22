@@ -47,7 +47,7 @@ router
             return res.send(result.succ(null, '服务器异常'));
         }
         const flag = await validateCode(req.body.code);
-        if (true) {
+        if (flag) {
             try {
                 user.password = bcrypt.hashSync(String(user.password), 10);
                 await User.addUser(user);
