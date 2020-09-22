@@ -119,7 +119,7 @@ function getBills() {
 // });
 function addBill(bill) {
     return new Promise((reslove, reject) => {
-        db.query(`insert into bill values(null,'${bill.note}',${bill.user_id},default,default,${bill.money},default,default `, (err, res) => {
+        db.query(`insert into bill values(null,'${bill.note}',${bill.user_id},default,default,${bill.money},default,default)`, (err, res) => {
             if (err) reject(err);
             reslove(res);
         });
@@ -133,7 +133,7 @@ function deleteBillById(id) {
             if (err) reject(err);
             reslove(null);
         })
-    })
+    });
 }
 // 获取所有有效流水金额的总和
 function getTotal() {
