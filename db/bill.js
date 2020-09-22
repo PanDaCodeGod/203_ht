@@ -105,7 +105,7 @@ const db = require('./connection');
 
 function getBills() {
     return new Promise((reslove, reject) => {
-        db.query('select b.*,u.name from bill as b left join user as u on b.user_id=u.id where isdelete=0 order by createtime desc)', (err, res) => {
+        db.query('select b.*,u.name from bill as b left join user as u on b.user_id=u.id where isdelete=0 order by createtime desc', (err, res) => {
             if (err) reject(err);
             reslove(res);
         });
