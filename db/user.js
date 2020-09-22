@@ -111,7 +111,7 @@ function getUsers() {
 // 根据用户名获取用户
 function getUserByName(name) {
     return new Promise((reslove, reject) => {
-        db.query(`select * from user where name=${name}`, (err, res) => {
+        db.query(`select * from user where name='${name}'`, (err, res) => {
             if (err) reject(err);
             reslove(res[0]);
         });
@@ -129,7 +129,7 @@ function getUserById(id) {
 // 添加一个用户
 function addUser(user) {
     return new Promise((reslove, reject) => {
-        db.query(`insert into user values(null,${user.name},${user.password},default,default,null)`, (err, res) => {
+        db.query(`insert into user values(null,'${user.name}','${user.password}',default,default,null)`, (err, res) => {
             if (err) reject(err);
             console.log(res);
             reslove(res);

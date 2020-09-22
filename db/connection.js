@@ -16,7 +16,7 @@ module.exports = mongoose;
 const mysql = require('mysql');
 
 const db = mysql.createConnection({
-    host: 'localhost',
+    host: '101.200.220.169',
     user: 'root',
     password: 'Qwer123!',
     database: '203_test'

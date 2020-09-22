@@ -15,18 +15,18 @@ async function jwtValidate(req, res, next) {
         try {
             const token = header.split(' ').pop();
             const id = jwt.verify(token, config.JWT_KEY).id;
-            if (!id) {
-                res.send(result.relogin(null, '令牌无效'));
+            if (id == undefined || !id) {
+                return res.send(result.relogin(null, '令牌无效'));
             }
             // 从数据库拿到user
             let user = await User.getUserById(id);
             if (!user) {
-                res.send(result.relogin(null, '没有该用户'));
+                return res.send(result.relogin(null, '没有该用户'));
             }
             req.user = user;
             next();
         } catch (err) {
-            res.send(result.relogin(null, '请先登录'));
+            return res.send(result.relogin(null, '请先登录'));
         }
     }
 }

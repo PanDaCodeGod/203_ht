@@ -8,37 +8,37 @@ router
     .get('/bills', async (req, res) => {
         try {
             let data = await Bill.getBills();
-           return  res.send(result.succ(data));
+            return res.send(result.succ(data));
         } catch (err) {
-            return  res.send(result.succ(null, err))
+            return res.send(result.succ(null, err))
         }
     })
     // 总计花费
     .get('/totalmoney', async (req, res) => {
         try {
             let data = await Bill.getTotal();
-            return res.send(result.succ(data[0]));
+            return res.send(result.succ(data));
         } catch (err) {
-            return  res.send(result.succ(null, err))
+            return res.send(result.succ(null, err))
         }
     })
     // 添加流水
     .post('/bill', async (req, res) => {
-        req.body.name = req.user.name;
+        req.body.user_id = req.user.id;
         try {
             await Bill.addBill(req.body);
-            return  res.send(result.succ(null, "添加成功"));
+            return res.send(result.succ(null, "添加成功"));
         } catch (err) {
-            return  res.send(result.succ(null, err));
+            return res.send(result.succ(null, err));
         }
     })
     // 删除某一条流水
     .delete('/bill', (req, res) => {
         try {
             Bill.deleteBillById(req.body.id);
-            return   res.send(result.succ(null, '删除成功'));
+            return res.send(result.succ(null, '删除成功'));
         } catch (err) {
-            return  res.send(result.succ(null, err))
+            return res.send(result.succ(null, err))
         }
     })
 

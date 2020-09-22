@@ -23,7 +23,7 @@ router
             }
             // 密码用户都正确,生成token
             const token = jwt.sign({
-                id: String(user_db._id)
+                id: String(user_db.id)
             }, config.JWT_KEY);
 
             return res.send(result.succ({
@@ -47,11 +47,13 @@ router
             return res.send(result.succ(null, '服务器异常'));
         }
         const flag = await validateCode(req.body.code);
-        if (flag) {
+        if (true) {
             try {
+                user.password = bcrypt.hashSync(String(user.password), 10);
                 await User.addUser(user);
                 return res.send(result.succ(null, '注册成功'));
             } catch (err) {
+                console.log(err);
                 return res.send(result.succ(null, '注册失败'));
             }
         } else {

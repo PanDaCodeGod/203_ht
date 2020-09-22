@@ -101,10 +101,11 @@ module.exports.getTotal = getTotal;*/
 
 // 改用mysql
 const db = require('./connection');
-// 获取所有流水
+// 获取所有流水,外加上外键对应的用户
+
 function getBills() {
     return new Promise((reslove, reject) => {
-        db.query('select * from bill', (err, res) => {
+        db.query('select b.*,u.name from bill as b left join user as u on b.user_id=u.id where isdelete=0', (err, res) => {
             if (err) reject(err);
             reslove(res);
         });
@@ -118,7 +119,7 @@ function getBills() {
 // });
 function addBill(bill) {
     return new Promise((reslove, reject) => {
-        db.query(`insert into bill values(null,${bill.note},${bill.user_id},default,default,${bill.money},default,default)`, (err, res) => {
+        db.query(`insert into bill values(null,'${bill.note}',${bill.user_id},default,default,${bill.money},default,default)`, (err, res) => {
             if (err) reject(err);
             reslove(res);
         });
@@ -135,13 +136,11 @@ function deleteBillById(id) {
     })
 }
 // 获取所有有效流水金额的总和
-getTotal();
 function getTotal() {
     return new Promise((reslove, reject) => {
         db.query(`select sum(money) from bill where isdelete='0' `, (err, res) => {
             if (err) reject(err);
-            console.log(res[0]['sum(money)']);
-            reslove(res);
+            reslove(res[0]['sum(money)']);
         })
     })
 }
