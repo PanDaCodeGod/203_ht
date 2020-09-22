@@ -28,7 +28,7 @@ router
 
             return res.send(result.succ({
                 token,
-                user_db
+                user: user_db
             }, "登录成功"));
         } catch (err) {
             return res.send(result.succ(null, '出现错误'));

@@ -1,7 +1,7 @@
 // 对返回结果进行一层封装
 const result = {
     // 成功的结果
-    succ(data, msg) {
+    succ(data, msg, user) {
         return {
             node_coode: 0,
             data: data || {},
