@@ -34,15 +34,16 @@ async function checkUpdate(params, callback) {
             pkgUrl: result.pkgUrl
         })
         // 小版本更新
-    } else if (cv < rv) {
-        callback(null, {
-            update: true,
-            wgtUrl: result.wgtUrl,
-            pkgUrl: ''
-        })
+        // } else if (cv < rv) {
+        //     callback(null, {
+        //         update: true,
+        //         wgtUrl: result.wgtUrl,
+        //         pkgUrl: ''
+        //     })
+        // 永远更新
     } else {
         callback(null, {
-            update: false,
+            update: true,
             wgtUrl: result.wgtUrl,
             pkgUrl: ''
         })
