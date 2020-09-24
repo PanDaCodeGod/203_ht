@@ -113,6 +113,9 @@ function getUserByName(name) {
     return new Promise((reslove, reject) => {
         db.query(`select * from user where name='${name}'`, (err, res) => {
             if (err) reject(err);
+            if (res.length == 0) {
+                reslove(null);
+            }
             reslove(res[0]);
         });
     })

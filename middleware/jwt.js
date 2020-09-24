@@ -6,7 +6,7 @@ const User = require('../db/user');
 
 
 async function jwtValidate(req, res, next) {
-    if (req.url == '/user/login' || req.url == '/user/register') {
+    if (req.url == '/user/login' || req.url == '/user/register' || new RegExp('/app/update').test(req.url)) {
         next();
     } else {
         // 拿到token

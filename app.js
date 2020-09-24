@@ -13,9 +13,14 @@ app.use(jwtvalidate);
 
 // 导入路由
 const BillRouter = require('./api/bill');
-const UserBill = require('./api/user');
+const UserRouter = require('./api/user');
+const appRouter = require('./api/app');
+
 
 app.use(BillRouter);
-app.use('/user', UserBill);
+app.use('/user', UserRouter);
+app.use('/app', appRouter);
+
+
 
 app.listen(203);
