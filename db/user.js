@@ -126,6 +126,17 @@ function getUserById(id) {
         });
     })
 }
+// 更新用户登录时间
+function updateUserLogin(id) {
+    return new Promise((reslove, reject) => {
+        let date = new Date();
+        date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+        db.query(`update user set logintime='${date}' where id=${id}`, (err) => {
+            if (err) reject(err);
+            reslove(null);
+        });
+    })
+}
 // 添加一个用户
 function addUser(user) {
     return new Promise((reslove, reject) => {
@@ -150,4 +161,5 @@ module.exports.getUserByName = getUserByName;
 module.exports.addUser = addUser;
 module.exports.getUsers = getUsers;
 module.exports.getUserById = getUserById;
+module.exports.updateUserLogin = updateUserLogin;
 module.exports.deleteUserById = deleteUserById;

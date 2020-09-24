@@ -24,6 +24,8 @@ async function jwtValidate(req, res, next) {
                 return res.send(result.relogin(null, '没有该用户'));
             }
             req.user = user;
+            // 更新用户登录时间
+            await User.updateUserLogin(id);
             next();
         } catch (err) {
             return res.send(result.relogin(null, '请先登录'));
