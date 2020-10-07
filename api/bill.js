@@ -3,7 +3,8 @@ const router = express.Router();
 const result = require('../utils/result');
 // 数据库接口
 const Bill = require('../db/bill');
-const e = require('express');
+const User = require('../db/user');
+
 router
     // 获取所有流水
     .get('/bills', async (req, res) => {
@@ -76,6 +77,36 @@ router
         } catch (err) {
             return res.send(result.succ(null, err))
         }
-    });
+    })
+    // 结算页面数据封装
+    .get('/bills/jiesuan', async (req, res) => {
+        let username = req.query.username;
+        try {
+            let bills = await Bill.getBills();
+            let users = await User.getUsers();
+            let data = [];
+            let flag;
+            users.forEach(user => {
+                if (user.name != username) {
+                    let obj = {}
+                    obj.name = user.name;
+                    obj.data = []
+                    bills.forEach(bill => {
+                        if (bill.used) {
+                            flag = [...JSON.parse(bill.used)].includes(username);
+                        }
+                        if (user.id == bill.user_id && !flag ) {
+                            obj.data.push(bill);
+                        }
+                    });
+                    data.push(obj);
+                }
+            });
+            return res.send(result.succ(data, '查询成功'));
+        } catch (err) {
+            console.log(err);
+            return res.send(result.succ(err, '查询出错'));
+        }
+    })
 
 module.exports = router;

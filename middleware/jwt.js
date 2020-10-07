@@ -6,11 +6,11 @@ const User = require('../db/user');
 
 
 async function jwtMD(req, res, next) {
+    let header = req.headers.authorization;
     if (req.url == '/user/login' || req.url == '/user/register' || new RegExp('/app/update').test(req.url)) {
         next();
     } else {
         // 截取token
-        let header = req.headers.authorization;
         if (!header) return res.send(result.relogin(null, '请先登录'));
         try {
             const token = header.split(' ').pop();

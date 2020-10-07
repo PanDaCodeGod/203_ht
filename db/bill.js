@@ -3,7 +3,7 @@ const db = require('./connection');
 /**
  *  获取所有未背删除的流水
  *
- * @return {*} 符合条件流水的集合
+ * @return {*} 流水的集合
  */
 function getBills() {
     return new Promise((reslove, reject) => {

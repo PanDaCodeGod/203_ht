@@ -98,6 +98,7 @@ module.exports.deleteUserById = deleteUserById;
 /**
  * 这个模块主要实现用户数据的操作
  */
+const tools = require('../utils/tools')
 
 // db连接
 const db = require('./connection');
@@ -155,14 +156,28 @@ function getUserById(id) {
 /**
  * 更新用户的最新登录时间
  *
- * @param {*} id
+ * @param {*} username
  * @return {*} 
  */
-function updateUserLogin(id) {
+function updateUserLogin(username) {
     return new Promise((reslove, reject) => {
-        let date = new Date();
-        date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-        db.query(`update user set logintime='${date}' where id=${id}`, (err) => {
+        date = tools.getCurrTime();
+        db.query(`update user set logintime='${date}' where name='${username}'`, (err) => {
+            if (err) reject(err);
+            reslove(null);
+        });
+    })
+}
+
+/**
+ * 更新用户正在使用的版本信息
+ *
+ * @param {*} username
+ * @return {*} 
+ */
+function updateAppVersion(username, appversion) {
+    return new Promise((reslove, reject) => {
+        db.query(`update user set appversion='${appversion}' where name='${username}'`, (err) => {
             if (err) reject(err);
             reslove(null);
         });
@@ -176,8 +191,9 @@ function updateUserLogin(id) {
  * @return {*} 
  */
 function addUser(user) {
+    ('id', 'name', 'password', 'role', 'createtime', 'logintime')
     return new Promise((reslove, reject) => {
-        db.query(`insert into user values(null,'${user.name}','${user.password}',default,default,null)`, (err, res) => {
+        db.query(`insert into user (id, name, password, role, createtime, logintime) values(null,'${user.name}','${user.password}',default,default,null)`, (err, res) => {
             if (err) reject(err);
             console.log(res);
             reslove(res);
@@ -205,3 +221,4 @@ module.exports.getUsers = getUsers;
 module.exports.getUserById = getUserById;
 module.exports.updateUserLogin = updateUserLogin;
 module.exports.deleteUserById = deleteUserById;
+module.exports.updateAppVersion = updateAppVersion;

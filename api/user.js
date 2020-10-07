@@ -63,6 +63,15 @@ router
     // 用户注销
     .delete('/zhuxiao', (req, res) => {
         res.send('1s');
+    })
+    // 获取所有用
+    .get('/users', async (req, res) => {
+        try {
+            let users = await User.getUsers();
+            return res.send(result.succ(users, '查询用户集合成功'));
+        } catch (err) {
+            return res.send(result.succ(err, '查询用户集合失败'));
+        }
     });
 
 module.exports = router;
