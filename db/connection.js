@@ -13,15 +13,15 @@ mongoose.connect("mongodb://localhost:27017/203", {
 module.exports = mongoose;
 */
 // mysql
+const dbconfig = require('./dbconfig')
+
 const mysql = require('mysql');
 
-const db = mysql.createConnection(
-    require('./dbconfig')
-);
+const db = mysql.createConnection(dbconfig);
 
 db.connect((err) => {
     if (err) return console.log(err);
-    console.log('成功');
+    console.log('数据库' + dbconfig.database + '连接成功');
 });
 
 module.exports = db;

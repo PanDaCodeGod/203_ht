@@ -5,11 +5,11 @@ const config = require('../config');
 const User = require('../db/user');
 
 
-async function jwtValidate(req, res, next) {
+async function jwtMD(req, res, next) {
     if (req.url == '/user/login' || req.url == '/user/register' || new RegExp('/app/update').test(req.url)) {
         next();
     } else {
-        // 拿到token
+        // 截取token
         let header = req.headers.authorization;
         if (!header) return res.send(result.relogin(null, '请先登录'));
         try {
@@ -23,9 +23,8 @@ async function jwtValidate(req, res, next) {
             if (!user) {
                 return res.send(result.relogin(null, '没有该用户'));
             }
+            // 将用户数据挂载到req中,方便其他中间件进行操作
             req.user = user;
-            // 更新用户登录时间
-            await User.updateUserLogin(id);
             next();
         } catch (err) {
             return res.send(result.relogin(null, '请先登录'));
@@ -33,4 +32,4 @@ async function jwtValidate(req, res, next) {
     }
 }
 
-module.exports = jwtValidate;
+module.exports = jwtMD;

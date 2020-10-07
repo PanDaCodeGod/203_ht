@@ -95,11 +95,19 @@ module.exports.getUserById = getUserById;
 module.exports.deleteUserById = deleteUserById;
 */
 
+/**
+ * 这个模块主要实现用户数据的操作
+ */
 
-
-// 改用mysql
+// db连接
 const db = require('./connection');
-// 获取所有用户
+
+
+/**
+ *获取所有用户集合
+ *
+ * @return {*} 所有用户的集合对象
+ */
 function getUsers() {
     return new Promise((reslove, reject) => {
         db.query('select * from user', (err, res) => {
@@ -108,28 +116,48 @@ function getUsers() {
         });
     })
 }
-// 根据用户名获取用户
+/**
+ *根据用户名查找用户,由于系统设计了用户名唯一的特性,只会找到一个用户
+ *
+ * @param {String} name 该用户的名称
+ * @return {*} 该用户的数据
+ */
 function getUserByName(name) {
     return new Promise((reslove, reject) => {
         db.query(`select * from user where name='${name}'`, (err, res) => {
             if (err) reject(err);
-            if (res.length == 0) {
+            if (res) {
+                reslove(res[0]);
+            } else {
                 reslove(null);
             }
-            reslove(res[0]);
         });
     })
 }
-// 根据id获取用户
+/**
+ * 根据id获取用户
+ * 
+ * @param {*} id 该用户的id
+ * @return {*} 
+ */
 function getUserById(id) {
     return new Promise((reslove, reject) => {
         db.query(`select * from user where id=${id}`, (err, res) => {
             if (err) reject(err);
-            reslove(res[0]);
+            if (res) {
+                reslove(res[0]);
+            } else {
+                reslove(null);
+            }
         });
     })
 }
-// 更新用户登录时间
+/**
+ * 更新用户的最新登录时间
+ *
+ * @param {*} id
+ * @return {*} 
+ */
 function updateUserLogin(id) {
     return new Promise((reslove, reject) => {
         let date = new Date();
@@ -140,7 +168,13 @@ function updateUserLogin(id) {
         });
     })
 }
-// 添加一个用户
+
+/**
+ *添加一个用户
+ *
+ * @param {*} user
+ * @return {*} 
+ */
 function addUser(user) {
     return new Promise((reslove, reject) => {
         db.query(`insert into user values(null,'${user.name}','${user.password}',default,default,null)`, (err, res) => {
@@ -150,7 +184,12 @@ function addUser(user) {
         });
     })
 }
-// 根据id删除用户
+/**
+ *根据id删除一个用户
+ *
+ * @param {*} id
+ * @return {*} 
+ */
 function deleteUserById(id) {
     return new Promise((reslove, reject) => {
         db.query(`update bill set isdelete='1' WHERE id =${id} `, (err) => {
