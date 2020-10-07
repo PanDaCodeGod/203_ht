@@ -19,8 +19,8 @@ async function checkUpdate(params, callback) {
     //这里简单判定下，不相等就是有更新。  
     var currentVersions = params.appVersion.split('.');
     var resultVersions = result.appVersion.split('.');
-    var cv = arrToNum(currentVersions);
-    var rv = arrToNum(resultVersions);
+    // var cv = arrToNum(currentVersions);
+    // var rv = arrToNum(resultVersions);
     if (currentVersions[0] < resultVersions[0]) {
         // 说明有大版本更新  
         callback(null, {
