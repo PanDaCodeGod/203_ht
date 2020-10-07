@@ -10,8 +10,8 @@ app.use(bodyParser.json());
 // 自定义中间件
 const jwtMD = require('./middleware/jwt');
 const userMD = require('./middleware/user');
-// app.use(jwtMD);
-// app.use(userMD);
+app.use(jwtMD);
+app.use(userMD);
 
 // 导入路由
 const BillRouter = require('./api/bill');
