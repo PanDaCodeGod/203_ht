@@ -14,6 +14,7 @@ router
     .post('/login', async (req, res) => {
         try {
             let user_db = await User.getUserByName(req.body.name);
+            user_db = await User.getUserById(user_db.id);
             if (!user_db) {
                 return res.send(result.succ(null, '用户不存在'));
             }
