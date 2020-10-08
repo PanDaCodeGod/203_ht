@@ -112,6 +112,8 @@ router
                 obj.user.inmoney = 0;
                 // 没有支付的订单列表
                 obj.data = []
+                // 符合条件流水的id集合
+                obj.bills_id = []
                 other_bills.forEach(bill => {
                     // 只过滤当前循环到的用户流水
                     if (user.id == bill.user_id) {
@@ -125,6 +127,7 @@ router
                         if (!flag) {
                             obj.data.push(bill);
                             obj.user.inmoney += bill.money;
+                            obj.bills_id.push(bill.id);
                         }
                     }
                 });
@@ -138,10 +141,11 @@ router
             obj.user = curr_user[0];
             obj.data = [];
             other_users.forEach((user, index) => {
-
                 obj.data[index] = {
-                    name: user.name,
-                    outmoney: 0
+                    user: user,
+                    outmoney: 0,
+                    bills: [],
+                    bills_id: []
                 };
                 curr_bills.forEach(bill => {
                     let flag = false;
@@ -152,6 +156,8 @@ router
                     }
                     // 如果没找到,说明当前用户没有支付,把订单push进去
                     if (!flag) {
+                        obj.data[index].bills.push(bill);
+                        obj.data[index].bills_id.push(bill.id);
                         obj.data[index].outmoney += bill.money;
                     }
                 });
