@@ -84,21 +84,79 @@ router
         try {
             let bills = await Bill.getBills();
             let users = await User.getUsers();
+            // 本接口返回的数据
             let data = [];
-            let flag;
-            users.forEach(user => {
-                if (user.name != username) {
-                    let obj = {}
-                    obj.name = user.name;
-                    obj.data = []
-                    bills.forEach(bill => {
-                        if (bill.used) {
-                            flag = [...JSON.parse(bill.used)].includes(username);
+            // 当前用户
+            let curr_user = users.filter(u => {
+                return u.name == username;
+            });
+            // 当前用户的流水
+            let curr_bills = bills.filter(b => {
+                return b.name == username;
+            });
+            // 其他用户集合
+            let other_users = users.filter(u => {
+                return u.name != username;
+            });
+            // 其他用户的流水
+            let other_bills = bills.filter(b => {
+                return b.name != username;
+            });
+            // 封装其他用户的数据
+            other_users.forEach(user => {
+                // 循环到的用户的数据载体
+                let obj = {}
+                // 存储循环到的当前用户
+                obj.user = user;
+                // 支付置空
+                obj.user.inmoney = 0;
+                // 没有支付的订单列表
+                obj.data = []
+                other_bills.forEach(bill => {
+                    // 只过滤当前循环到的用户流水
+                    if (user.id == bill.user_id) {
+                        let flag = false;
+                        // 如果从已支付列表找到,就变为true,就不会进入下边的if
+                        if (bill.used != '[]') {
+                            let usedarr = JSON.parse(bill.used);
+                            flag = usedarr.includes(username);
                         }
-                        if (user.id == bill.user_id && !flag ) {
+                        // 如果没找到,说明当前用户没有支付,把订单push进去
+                        if (!flag) {
                             obj.data.push(bill);
+                            obj.user.inmoney += bill.money;
                         }
-                    });
+                    }
+                });
+                // 计算应该支付给每个用户多少钱
+                obj.user.inmoney = (obj.user.inmoney / 3).toFixed(2);
+                // 存进返回值
+                data.push(obj);
+            });
+            // 封装当前用户的数据
+            let obj = {};
+            obj.user = curr_user[0];
+            obj.data = [];
+            other_users.forEach((user, index) => {
+
+                obj.data[index] = {
+                    name: user.name,
+                    outmoney: 0
+                };
+                curr_bills.forEach(bill => {
+                    let flag = false;
+                    // 如果从已支付列表找到,就变为true,就不会进入下边的if
+                    if (bill.used != '[]') {
+                        let usedarr = JSON.parse(bill.used);
+                        flag = usedarr.includes(user.name);
+                    }
+                    // 如果没找到,说明当前用户没有支付,把订单push进去
+                    if (!flag) {
+                        obj.data[index].outmoney += bill.money;
+                    }
+                });
+                obj.data[index].outmoney = (obj.data[index].outmoney / 3).toFixed(2);
+                if (index == other_users.length - 1) {
                     data.push(obj);
                 }
             });
