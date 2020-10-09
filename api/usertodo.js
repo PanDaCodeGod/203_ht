@@ -88,7 +88,7 @@ router
     .get('/todos', async (req, res) => {
         try {
             const id = req.user.id;
-            let data = await Todo.getTodoByUserId(3);
+            let data = await Todo.getTodoByUserId(id);
             if (data.bills_id) data.bills_id = JSON.parse(data.bills_id);
             res.send(result.succ(data, '获取待办项成功'));
         } catch (err) {
