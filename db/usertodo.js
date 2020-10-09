@@ -26,7 +26,7 @@ function getTodoByUserId(userid) {
  */
 function updateTodoByUserId(id) {
     return new Promise((reslove, reject) => {
-        db.query(`update usertodo isdown=1 where id='${id}' `, (err, res) => {
+        db.query(`update usertodo set isdown=1 where id='${id}' `, (err, res) => {
             if (err) reject(err);
             reslove(res);
         });
@@ -39,7 +39,7 @@ function updateTodoByUserId(id) {
  */
 function addTodo(todo) {
     return new Promise((reslove, reject) => {
-        db.query(`insert into usertodo (id, task, user_id, bills_id, createtime, downtime,money,isdown,creater) values(null,'${todo.task}','${todo.user_id}','${todo.bills_id}',default,null,${todo.money},default),'${todo.creater}'`, (err, res) => {
+        db.query(`insert into usertodo (id, task, user_id, bills_id, createtime, downtime,money,isdown,creater) values(null,'${todo.task}','${todo.user_id}','${todo.bills_id}',default,null,${todo.money},default,'${todo.creater}')`, (err, res) => {
             if (err) reject(err);
             reslove(res);
         });

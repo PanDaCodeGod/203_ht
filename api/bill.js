@@ -132,7 +132,7 @@ router
                     }
                 });
                 // 计算应该支付给每个用户多少钱
-                obj.user.inmoney = (obj.user.inmoney / 3).toFixed(2);
+                obj.user.inmoney = (obj.user.inmoney / users.length).toFixed(2);
                 // 存进返回值
                 data.push(obj);
             });
@@ -161,7 +161,7 @@ router
                         obj.data[index].outmoney += bill.money;
                     }
                 });
-                obj.data[index].outmoney = (obj.data[index].outmoney / 3).toFixed(2);
+                obj.data[index].outmoney = (obj.data[index].outmoney / users.length).toFixed(2);
                 if (index == other_users.length - 1) {
                     data.push(obj);
                 }
