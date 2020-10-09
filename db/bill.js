@@ -70,8 +70,42 @@ function getBillByUserId(userid) {
         })
     });
 }
+/**
+ *获取某条流水
+ *
+ * @param {*} id 该流水的id
+ */
+function getBillById(id) {
+    return new Promise((reslove, reject) => {
+        db.query(`select * from bill where id='${id}'`, (err, res) => {
+            if (err) reject(err);
+            if (res) {
+                reslove(res[0]);
+            }
+            reslove([]);
+        })
+    });
+}
+/**
+ * 根据id更新该条流水的结算状态
+ * 
+ * @param {*} id 该流水的id
+ * @param {*} used 结算用户列
+ * 
+ */
+function updateBillOnUsed(id, used) {
+    return new Promise((reslove, reject) => {
+        db.query(`update bill set used='${used}' where id='${id}'`, (err, res) => {
+            if (err) reject(err);
+            reslove(res);
+        });
+    });
+}
+
 // 导出
 module.exports.getBills = getBills;
+module.exports.updateBillOnUsed = updateBillOnUsed;
+module.exports.getBillById = getBillById;
 module.exports.addBill = addBill;
 module.exports.deleteBillById = deleteBillById;
 module.exports.getTotal = getTotal;

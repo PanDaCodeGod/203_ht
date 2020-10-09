@@ -171,6 +171,5 @@ router
             console.log(err);
             return res.send(result.succ(err, '查询出错'));
         }
-    })
-
+    });
 module.exports = router;
