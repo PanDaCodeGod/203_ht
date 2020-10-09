@@ -52,7 +52,7 @@ router
             // id
             let todo_id = req.body.id;
             await Todo.updateTodoByUserId(todo_id);
-            res.send(result.succ(null, '~OK~'));
+            res.send(result.succ(null, '~OK~请等待对方确认'));
         } catch (err) {
             res.send(result.succ(err, '喵,貌似出现了一些问题~'));
         }
