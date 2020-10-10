@@ -25,8 +25,9 @@ function getTodoByUserId(userid) {
  * @return {id} 
  */
 function updateTodoByUserId(id) {
+    var date = tools.getCurrTime();
     return new Promise((reslove, reject) => {
-        db.query(`update usertodo set isdown=1 where id='${id}' `, (err, res) => {
+        db.query(`update usertodo set isdown=1,downtime='${date}' where id='${id}' `, (err, res) => {
             if (err) reject(err);
             reslove(res);
         });
