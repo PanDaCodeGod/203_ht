@@ -9,6 +9,9 @@ const User = require('../db/user');
 const jwt = require('jsonwebtoken');
 // JWT_KEY
 const config = require('../config');
+const {
+    user
+} = require('../db/dbconfig');
 router
     // 登录
     .post('/login', async (req, res) => {
@@ -65,11 +68,23 @@ router
     .delete('/zhuxiao', (req, res) => {
         res.send('1s');
     })
-    // 获取所有用
+    // 获取所有用户
     .get('/users', async (req, res) => {
         try {
+            let userCheckList = [];
             let users = await User.getUsers();
-            return res.send(result.succ(users, '查询用户集合成功'));
+            for (let user of users) {
+                if (user.name == req.user.name) {
+                    continue;
+                }
+                userCheckList.push({
+                    name: user.name,
+                    id: user.id,
+                    checked: false,
+                    disabled: false
+                });
+            }
+            return res.send(result.succ(userCheckList, '查询用户集合成功'));
         } catch (err) {
             return res.send(result.succ(err, '查询用户集合失败'));
         }

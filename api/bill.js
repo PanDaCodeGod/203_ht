@@ -27,6 +27,17 @@ router
     // 添加流水
     .post('/bill', async (req, res) => {
         req.body.user_id = req.user.id;
+        //参与成员逻辑的相关处理
+        let users = await User.getUsers();
+        for (let u of users) {
+            let index = req.body.groupUsers.findIndex(e => u == e.name)
+            if (index == -1) {
+                users.push(u.name);
+            } else {
+                users.splice(index, 1);
+            }
+        }
+
         try {
             await Bill.addBill(req.body);
             return res.send(result.succ(null, "添加成功"));
@@ -150,8 +161,8 @@ router
                 curr_bills.forEach(bill => {
                     let flag = false;
                     // 如果从已支付列表找到,就变为true,就不会进入下边的if
+                    let usedarr = JSON.parse(bill.used);
                     if (bill.used != '[]') {
-                        let usedarr = JSON.parse(bill.used);
                         flag = usedarr.includes(user.name);
                     }
                     // 如果没找到,说明当前用户没有支付,把订单push进去
@@ -161,7 +172,7 @@ router
                         obj.data[index].outmoney += bill.money;
                     }
                 });
-                obj.data[index].outmoney = (obj.data[index].outmoney / users.length).toFixed(2);
+                obj.data[index].outmoney = (obj.data[index].outmoney / users.length - usedarr.length).toFixed(2);
                 if (index == other_users.length - 1) {
                     data.push(obj);
                 }
